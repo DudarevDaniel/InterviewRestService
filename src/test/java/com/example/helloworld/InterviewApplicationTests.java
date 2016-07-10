@@ -1,6 +1,5 @@
 package com.example.helloworld;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
@@ -11,10 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringApplicationConfiguration(classes = InterviewApplication.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class InterviewApplicationTests {
+public abstract class InterviewApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
 
 }

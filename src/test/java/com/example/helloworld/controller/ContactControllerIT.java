@@ -61,12 +61,21 @@ public class ContactControllerIT extends InterviewApplicationTests {
     }
 
     @Test
-    public void testGetContactsByNameFilterWithEmptyResult() throws Exception {
-        String namePattern = "***";
+    public void testGetContactsByNameFilterWithEmptyNameFilter() throws Exception {
+        String namePattern = "";
         mockMvc.perform(MockMvcRequestBuilders.get("/hello/contacts")
                 .param("nameFilter", namePattern)
         )
                 .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+
+    @Test
+    public void testGetContactsByNameFilterWithEmptyResult() throws Exception {
+        String namePattern = "^.*$";
+        mockMvc.perform(MockMvcRequestBuilders.get("/hello/contacts")
+                .param("nameFilter", namePattern)
+        )
+                .andExpect(MockMvcResultMatchers.status().is(204));
     }
 
 }
