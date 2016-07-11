@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 @RestController
+@RequestMapping("/hello/contacts")
 public class ContactController {
 
     private static final String ARRAY_START = "[";
@@ -31,41 +32,13 @@ public class ContactController {
     @Autowired
     private ContactService contactService;
 
-    @RequestMapping(value = "/hello/contacts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getContactsByNameFilter(@RequestParam("nameFilter") String nameFilter) {
         if (!isValidNameFilter(nameFilter)) {
             return ResponseEntity.badRequest().body(null);
         }
-        ResponseEntity<String> response = new ResponseEntity<String>(null);
         ScrollableResults searchResult = contactService.findByNamePattern(nameFilter);
-        int resultSize = 0;
-        StringBuilder resultJsonBuilder = new StringBuilder(ARRAY_START);
-        ObjectMapper objectMapper = new ObjectMapper();
-        boolean hasNext = searchResult != null && searchResult.next();
-
-        try {
-            while (hasNext) {
-                resultJsonBuilder.append(objectMapper.writeValueAsString(parseRow(searchResult)));
-                resultSize++;
-                hasNext = searchResult.next();
-                if (hasNext) {
-                    resultJsonBuilder.append(COMMA_SEPARATOR);
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Failed to parse the result", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        } finally {
-            searchResult.close();
-        }
-
-        String result = resultJsonBuilder.append(ARRAY_END).toString();
-        if (resultSize == 0) {
-            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
-        } else {
-            response = response.ok(result);
-        }
-        return response;
+        return buildJsonFromScrollableResult(searchResult);
     }
 
     private boolean isValidNameFilter(String nameFilter) {
@@ -79,6 +52,35 @@ public class ContactController {
             return false;
         }
         return true;
+    }
+    
+    private ResponseEntity<String> buildJsonFromScrollableResult(ScrollableResults searchResult) {
+        StringBuilder resultJsonBuilder = new StringBuilder(ARRAY_START);
+        boolean hasNext = searchResult != null && searchResult.next();
+        ObjectMapper objectMapper = new ObjectMapper();
+        int resultSize = 0;
+        try {
+            while (hasNext) {
+                resultJsonBuilder.append(objectMapper.writeValueAsString(parseRow(searchResult)));
+                resultSize++;
+                hasNext = searchResult.next();
+                if (hasNext) {
+                    resultJsonBuilder.append(COMMA_SEPARATOR);
+                }
+            }
+        } catch (Exception ex) {
+            logger.error("Failed to parse the result", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } finally {
+            if (searchResult != null) {
+                searchResult.close();
+            }
+        }
+        String result = resultJsonBuilder.append(ARRAY_END).toString();
+        if (resultSize == 0) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
+        }
+        return ResponseEntity.ok(result);
     }
 
     private Contact parseRow(ScrollableResults searchResult) {
