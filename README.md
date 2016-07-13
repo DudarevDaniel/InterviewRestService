@@ -22,3 +22,12 @@
 данных "demoRestDB". Порт по-умолчанию 3306, username: root, password: root. Настройки подключения указаны в 
 application.properties. Приложение запускается либо командой "mvn spring-boot:run", либо в IDE запустить 
 main-class "com.example.helloworld.InterviewApplication". Проект пакуется в jar.</p>
+
+
+<h3>UPDATE:</h3>
+<p>Согласно замечаниям, я внес следующие изменения:
+    - Сервисный бин теперь возвращает не ScrollableResults, а коллекцию Контактов;
+    - Мы в Java перебираем все контакты из базы данных и фильтруем их по паттерну;
+    - Периодически очищается persistence context, чтобы не упасть с OutOfMemory. Порог очищения задается в property-файле;
+    - Автоматическая сериализация в JSON;
+</p>
