@@ -1,7 +1,6 @@
 package com.example.helloworld.dao;
 
 import com.example.helloworld.InterviewApplicationTests;
-import com.example.helloworld.dao.entity.Contact;
 import org.hibernate.ScrollableResults;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,20 +16,16 @@ public class ContactDaoTest extends InterviewApplicationTests {
     private ContactDao contactDao;
 
     @Test
-    public void testFindByNamePattern() throws Exception {
-        String namePattern = "^A.*$";
-        ScrollableResults contacts = contactDao.findByNamePattern(namePattern);
+    public void testGetAllContacts() throws Exception {
+        ScrollableResults contacts = contactDao.getAllContacts();
 
         Assert.assertNotNull(contacts);
-
         int resultSize = 0;
         while (contacts.next()) {
-            Object row = contacts.get()[0];
-            Contact contact = (Contact) row;
+            contacts.get();
             resultSize++;
-            Assert.assertFalse(contact.getName().startsWith("A"));
         }
-        Assert.assertEquals(3, resultSize);
+        Assert.assertEquals(5, resultSize);
     }
 
 }

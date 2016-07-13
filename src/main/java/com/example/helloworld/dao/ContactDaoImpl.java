@@ -16,10 +16,9 @@ public class ContactDaoImpl implements ContactDao {
     private EntityManager entityManager;
 
     @Override
-    public ScrollableResults findByNamePattern(String nameFilter) {
+    public ScrollableResults getAllContacts() {
         Session session = entityManager.unwrap(Session.class);
-        return session.getNamedQuery(Contact.FIND_BY_NAME_PATTERN_QUERY)
-                .setString("pattern", nameFilter)
+        return session.createQuery("from Contact")
                 .setReadOnly(true)
                 .setCacheable(false)
                 .scroll(ScrollMode.FORWARD_ONLY);

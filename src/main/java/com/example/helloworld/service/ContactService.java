@@ -1,9 +1,12 @@
 package com.example.helloworld.service;
 
-import org.hibernate.ScrollableResults;
+import com.example.helloworld.dao.entity.Contact;
+import com.example.helloworld.exceptions.FailedToParseResultException;
+
+import java.util.List;
 
 public interface ContactService {
 
-    ScrollableResults findByNamePattern(String nameFilter);
+    List<Contact> findByNamePattern(String nameFilter) throws FailedToParseResultException;
 
 }

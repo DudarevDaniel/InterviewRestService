@@ -8,26 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-
-@NamedNativeQueries({
-        @NamedNativeQuery(
-                name = Contact.FIND_BY_NAME_PATTERN_QUERY,
-                query = "select * from contact where name NOT REGEXP :pattern",
-                resultClass = Contact.class
-        )
-})
 @Entity
 @Table
 public class Contact implements Serializable {
 
     private static final long serialVersionUID = 5240422933039131445L;
-
-    public static final String FIND_BY_NAME_PATTERN_QUERY = "findByNamePattern";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

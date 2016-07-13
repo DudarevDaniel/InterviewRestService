@@ -5,6 +5,6 @@ import org.hibernate.ScrollableResults;
 
 public interface ContactDao {
 
-    ScrollableResults findByNamePattern(String nameFilter);
+    ScrollableResults getAllContacts();
 
 }
