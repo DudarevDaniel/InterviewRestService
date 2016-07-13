@@ -23,8 +23,7 @@
 application.properties. Приложение запускается либо командой "mvn spring-boot:run", либо в IDE запустить 
 main-class "com.example.helloworld.InterviewApplication". Проект пакуется в jar.</p>
 
-
-<h3>UPDATE:</h3>
+<h3>Update:</h3>
 <p>Согласно замечаниям, я внес следующие изменения:</p>
 <p>    - Сервисный бин теперь возвращает не ScrollableResults, а коллекцию Контактов;</p>
 <p>    - Мы в Java перебираем все контакты из базы данных и фильтруем их по паттерну;</p>
